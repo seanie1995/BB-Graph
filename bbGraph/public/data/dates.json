@@ -1,0 +1,64 @@
+{
+  "data": [
+    {
+      "month": "Jan",
+      "value": 9000,
+      "color": "#7f7f7f"
+    },
+    {
+      "month": "Feb",
+      "value": 12000,
+      "color": "#3a5d4c"
+    },
+    {
+      "month": "Mar",
+      "value": 8000,
+      "color": "#5c5c47"
+    },
+    {
+      "month": "Apr",
+      "value": 11000,
+      "color": "#595959"
+    },
+    {
+      "month": "May",
+      "value": 12000,
+      "color": "#8b7d61"
+    },
+    {
+      "month": "Jun",
+      "value": 9000,
+      "color": "#3e4a52"
+    },
+    {
+      "month": "Jul",
+      "value": 14000,
+      "color": "#2f4346"
+    },
+    {
+      "month": "Aug",
+      "value": 10000,
+      "color": "#595f53"
+    },
+    {
+      "month": "Sept",
+      "value": 13000,
+      "color": "#6c5a4f"
+    },
+    {
+      "month": "Oct",
+      "value": 9000,
+      "color": "#3f4c4e"
+    },
+    {
+      "month": "Nov",
+      "value": 10000,
+      "color": "#474f53"
+    },
+    {
+      "month": "Dec",
+      "value": 12000,
+      "color": "#4f5a60"
+    }
+  ]
+}

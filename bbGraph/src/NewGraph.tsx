@@ -1,33 +1,33 @@
-import React from 'react'
 import "./graph.css"
+import { useState, useEffect } from "react";
+
 
 const NewGraph = () => {
+
+    const [data, setData] = useState<[string, number][]>([]); 
+
+    useEffect(() => {
+        fetch("../public/data/months.json")
+            .then((response) => response.json())
+            .then((json: { data: { month: string, value: number}[]}) => {
+                console.log(json)
+                const formattedData: [string, number][] = json.data.map(item => [item.month, item.value]);
+                setData(formattedData);
+                console.log("You made it here!");
+            })
+            .catch((error) => console.error(error));
+    },[])
 
     const SVG_WIDTH: number = 670;
     const SVG_HEIGHT: number = 200;
 
-    const data: [string, number][] = [
-        ["Jan", 90],
-        ["Feb", 120],
-        ["Mar", 100],
-        ["Apr", 110],
-        ["May", 130],
-        ["Jun", 90],
-        ["Jul", 150],
-        ["Aug", 100],
-        ["Sept", 130],
-        ["Oct", 90],
-        ["Nov", 140],
-        ["Dec", 120],
-    ];
-
-    const x0 = 2;
-    const y0 = 2;
+    const x0 = 0;
+    const y0 = 0;
     const xAxisLength = SVG_WIDTH - x0 * 2;
     const yAxisLength = SVG_HEIGHT - y0 * 2;
     const xAxisY = yAxisLength + y0;
 
-    const dataYMax = data.reduce(
+    const dataYMax = (data ?? []).reduce(
         (currMax, [_, dataY]) => Math.max(currMax, dataY),
         -Infinity
     ) + 10;
@@ -38,7 +38,7 @@ const NewGraph = () => {
 
     const numYTicks = 4;
 
-    const barPlotWidth = xAxisLength / (data.length - 1);
+    const barPlotWidth = xAxisLength / ((data?.length ?? 1) - 1);
 
     const getDataPoints = (index: number, dataY: number) => {
         const x = x0 + index * barPlotWidth;
@@ -89,7 +89,11 @@ const NewGraph = () => {
                     );
                 })}
 
-                {data.map(([date, dataY], index) => {
+                
+
+                {/* Graph + color under graph */}
+
+                {(data ?? []).map(([date, dataY], index) => {
 
                     const { x, y } = getDataPoints(index, dataY);
 
@@ -104,8 +108,8 @@ const NewGraph = () => {
 
                             {index > 0 && (
                                 <line
-                                    x1={getDataPoints(index - 1, data[index - 1][1]).x}
-                                    y1={getDataPoints(index - 1, data[index - 1][1]).y}
+                                    x1={getDataPoints(index - 1, data?.[index - 1]?.[1] ?? 0).x}
+                                    y1={getDataPoints(index - 1, data?.[index - 1]?.[1] ?? 0).y}
                                     x2={x}
                                     y2={y}
                                     stroke="#2C3340"
@@ -119,21 +123,17 @@ const NewGraph = () => {
 
                             <line
                                 x1={x}
-                                y1={2}
+                                y1={0}
                                 x2={x}
                                 y2={xAxisY + 5}
                                 stroke="gray"
                                 strokeWidth=""
                             />
-
-
                         </g>
-
-
                     );
                 })}
                 <path
-                    d={data
+                    d={(data ?? [])
                         .map(([_, dataY], index) => {
                             const { x, y } = getDataPoints(index, dataY);
                             return `${index === 0 ? 'M' : 'L'} ${x} ${y}`;
@@ -141,6 +141,7 @@ const NewGraph = () => {
                         .join(' ') + ` L ${xAxisLength + x0} ${xAxisY} L ${x0} ${xAxisY} Z`} // This closes the area at the bottom
                     fill="rgba(44, 52, 64, 0.80)"
                 />
+
             </svg>
         </div>
     )
