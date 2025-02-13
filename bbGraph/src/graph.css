@@ -5,8 +5,16 @@
 
 .dateLabel {
     font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .valueLabel {
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.barData {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
     font-size: 12px;
 }

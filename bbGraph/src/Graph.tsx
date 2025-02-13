@@ -143,6 +143,10 @@ function Graph() {
               {date}
             </text>
 
+            <text className="dateLabel" x={x} y={xAxisY + 18} textAnchor="middle">
+              {date}
+            </text>
+
             <line
               x1={x}
               y1={50}

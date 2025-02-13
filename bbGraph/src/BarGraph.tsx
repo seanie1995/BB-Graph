@@ -3,6 +3,7 @@ import "./graph.css";
 
 function App() {
     const [data, setData] = useState<[string, number, string][]>([]);
+    const [vatData, setVatData] = useState<[number, string][]>([]);
     const [tooltip, setTooltip] = useState<{ x: number, y: number, value: number, visible: boolean }>({
         x: 0,
         y: 0,
@@ -20,8 +21,27 @@ function App() {
             .catch((error) => console.error(error));
     }, []);
 
-    const SVG_WIDTH = 640;
-    const SVG_HEIGHT = 300;
+    useEffect(() => {
+        if (data.length > 0) {
+            const vatRate: number = 0.20;
+            const orange: string = "#FFA500"
+            
+            // Removing the months, leaving only the value and color
+            const dataNoMonths: [number, string][] = data.map(([m, v, c]) => [v, c]);
+    
+            // Applying the VAT calculation
+            const dataMoms = dataNoMonths.map(([value, color]) => {
+                const priceWithMoms: number = value * vatRate; // Now 'value' is a number
+                const newColor: string = orange;
+                
+                return [priceWithMoms, newColor] as [number, string];
+            });
+            setVatData(dataMoms);
+        }
+    }, [data]);
+    
+    const SVG_WIDTH = 710;
+    const SVG_HEIGHT = 230;
 
     const x0 = 0;
     const xAxisLength = SVG_WIDTH - x0 * 2;
@@ -37,7 +57,7 @@ function App() {
     ) + 10;
     const dataYMin = 0;
     const dataYRange = dataYMax - dataYMin;
-    const numYTicks = 5;
+    const numYTicks = data?.length / 2;
 
     const barPlotWidth = xAxisLength / ((data?.length ?? 1));
 
@@ -80,7 +100,7 @@ function App() {
                     const yRatio = (dataY - dataYMin) / dataYRange;
                     const y = y0 + (1 - yRatio) * yAxisLength;
                     const height = yRatio * yAxisLength;
-                    const sidePadding = 15;
+                    const sidePadding = 14;
 
                     return (
                         <g key={index}>
@@ -109,9 +129,14 @@ function App() {
                                     setTooltip((prev) => ({ ...prev, visible: false }))
                                 }
                             />
-                            <text className="dateLabel" x={x + barPlotWidth / 2} y={xAxisY + 16} textAnchor="middle">
+                          
+                            <text className="dateLabel" x={x + barPlotWidth / 2} y={xAxisY + 16} textAnchor={"middle"} >
                                 {date}
                             </text>
+
+                            {/* <text className="barData" x={x + barPlotWidth / 2} y={(( yAxisLength - height) - 8)} textAnchor={"middle"} fill="black" transform={`rotate(-45, ${x + barPlotWidth / 2}, ${(yAxisLength - height) - 18})`} >
+                                {dataY}
+                            </text> */}
                         </g>
                     );
                 })}
@@ -130,9 +155,10 @@ function App() {
                         borderRadius: "4px",
                         pointerEvents: "none",
                         fontSize: "14px",
+                        fontFamily: "Arial"
                     }}
                 >
-                    {tooltip.value}
+                    {tooltip.value + ":-"}
                 </div>
             )}
         </div>
