@@ -3,37 +3,37 @@
     {
       "month": "Mån",
       "value": 9000,
-      "color": "#7f7f7f"
+      "color": "#e38a1e"
     },
     {
       "month": "Tis",
       "value": 12000,
-      "color": "#3a5d4c"
+      "color": "#e38a1e"
     },
     {
       "month": "Ons",
       "value": 8000,
-      "color": "#5c5c47"
+      "color": "#e38a1e"
     },
     {
       "month": "Tors",
       "value": 11000,
-      "color": "#595959"
+      "color": "#e38a1e"
     },
     {
       "month": "Fre",
       "value": 12000,
-      "color": "#8b7d61"
+      "color": "#e38a1e"
     },
     {
       "month": "Lör",
       "value": 9000,
-      "color": "#3e4a52"
+      "color": "#e38a1e"
     },
     {
       "month": "Sön",
       "value": 4000,
-      "color": "#2f4346"
+      "color": "#e38a1e"
     }
   ]
 }

@@ -18,6 +18,18 @@ function App() {
 
     })
 
+    const [inklMomsHeights, setInklMomsHeights] = useState<number[]>([]);
+
+    useEffect(() => {
+        const inklMomsValues: number[] = dataWithMoms.map(([_, v]) => {
+            const yRatio: number = (v - dataYMin) / dataYRange
+            return yRatio * xAxisLength
+        })
+
+        setInklMomsHeights(inklMomsValues);
+
+    }, [dataWithMoms]);
+
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = event.target;
         setCheckBoxes((prev) => ({
@@ -57,6 +69,8 @@ function App() {
         }
     }, [dataWithMoms]);
 
+
+
     const SVG_WIDTH = 670;
     const SVG_HEIGHT = 250;
 
@@ -71,7 +85,7 @@ function App() {
     const dataYMax = (dataWithMoms ?? []).reduce(
         (currMax, [_, dataY]) => Math.max(currMax, dataY),
         -Infinity
-    ) + 10;
+    );
     const dataYMin = 0;
     const dataYRange = dataYMax - dataYMin;
     const numYTicks = dataWithMoms?.length / 2;
@@ -155,7 +169,7 @@ function App() {
                                 <text className="dateLabel" x={x + barPlotWidth / 2} y={xAxisY + 16} textAnchor={"middle"} >
                                     {date}
                                 </text>
-                                {checkBoxes.printVersion && <text className="barData" x={x + barPlotWidth / 2} y={((yAxisLength - height) + 14)} textAnchor={"middle"} fill="black"  >
+                                {checkBoxes.printVersion && <text className="barData" x={x + barPlotWidth / 2} y={((yAxisLength - height) - 4)} textAnchor={"middle"} fill="black"  >
                                     {dataY + ":-"}
                                 </text>}
 
@@ -199,9 +213,10 @@ function App() {
                                         setTooltip((prev) => ({ ...prev, visible: false }))
                                     }
                                 />
-                                {checkBoxes.printVersion && <text className="barData" x={x + barPlotWidth / 2} y={((yAxisLength - height) + 14)} textAnchor={"middle"} fill="white"  >
+                                {checkBoxes.printVersion && <text className="barData" x={x + barPlotWidth / 2} y={((yAxisLength - height) + 16)} textAnchor={"middle"} fill="white"  >
                                     {dataY + ":-"}
                                 </text>}
+
                             </g>
                         );
                     })}
