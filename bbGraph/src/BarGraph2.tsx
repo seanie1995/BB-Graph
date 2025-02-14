@@ -41,7 +41,7 @@ function App() {
     };
 
     useEffect(() => {
-        fetch("/data/dates3.json")
+        fetch("/data/dates2.json")
             .then((response) => response.json())
             .then((json: { data: { month: string, value: number, color: string }[] }) => {
                 const formattedData: [string, number, string][] = json.data.map(item => [item.month, item.value, item.color]);
