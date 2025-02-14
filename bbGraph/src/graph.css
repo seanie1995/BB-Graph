@@ -1,6 +1,6 @@
 .graphContainer {
-    border: 1px solid black;
-    padding: 40px;
+    border: 1px dotted black;
+    padding: 20px 30px 20px 30px;
 }
 
 .dateLabel {
@@ -15,6 +15,32 @@
 
 .barData {
     font-family: Arial, Helvetica, sans-serif;
-    color: white;
-    font-size: 12px;
+    font-size: 10px;
+}
+
+.momsGraph {
+    z-index: 20;
+}
+
+.mainContainer {
+    border: 1px solid black;
+    display: flex;
+    width: 710px;
+    height: 280px;
+    padding: 20px 20px 20px 20px;
+}
+
+.radioBox {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid black;
+    width: 150px;
+    margin-top: 10px;
+}
+
+.checkboxWrapper {
+    display: flex;
+    align-items: center; /* Align checkbox and label in one row */
+    gap: 8px; /* Space between checkbox and text */
 }
