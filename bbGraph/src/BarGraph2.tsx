@@ -3,7 +3,7 @@ import "./graph.css";
 
 function App() {
     const [dataWithMoms, setData] = useState<[string, number, string][]>([]);
-    const [dataWithoutMoms, setutanMomsData] = useState<[number, string][]>([]);
+    const [dataWithoutMoms, setutanMomsData] = useState<[number, string, number][]>([]);
     const [tooltip, setTooltip] = useState<{ x: number, y: number, value: number, visible: boolean }>({
         x: 0,
         y: 0,
@@ -20,6 +20,17 @@ function App() {
 
     const [inklMomsHeights, setInklMomsHeights] = useState<number[]>([]);
 
+    useEffect(() => {
+        const inklMomsValues: number[] = dataWithMoms.map(([_, v]) => {
+            const yRatio: number = (v - dataYMin) / dataYRange
+            return yRatio * xAxisLength
+        })
+
+        console.log(inklMomsValues);
+        setInklMomsHeights(inklMomsValues);
+
+    }, [dataWithMoms]);
+
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = event.target;
         setCheckBoxes((prev) => ({
@@ -30,7 +41,7 @@ function App() {
     };
 
     useEffect(() => {
-        fetch("/data/dates.json")
+        fetch("/data/dates3.json")
             .then((response) => response.json())
             .then((json: { data: { month: string, value: number, color: string }[] }) => {
                 const formattedData: [string, number, string][] = json.data.map(item => [item.month, item.value, item.color]);
@@ -44,18 +55,28 @@ function App() {
         if (dataWithMoms.length > 0) {
             const vatRate: number = 0.25;
             const barColor: string = "#3f5721"
-
+            
+            const inklMomsHeights: number[] = dataWithMoms.map(([_, v]) => {
+                const yRatio: number = (v - dataYMin) / dataYRange
+                return yRatio * yAxisLength
+            })
             // Removing the months, leaving only the value and color
-            const dataNoMonths: [number, string][] = dataWithMoms.map(([m, v, c]) => [v, c]);
+            const dataNoMoms: [number, string, number][] = dataWithMoms.map(([_, v, __], index) => {
+                const priceWithoutMoms: number = v - (v * vatRate); // Now 'value' is a number
+                const newColor: string = barColor;
+                const momsHeight: number = inklMomsHeights[index] ?? 0
+
+                return [priceWithoutMoms, newColor, momsHeight]
+            });
 
             // Applying the VAT calculation
-            const dataMoms = dataNoMonths.map(([value, color]) => {
-                const priceWithoutMoms: number = value - (value * vatRate); // Now 'value' is a number
-                const newColor: string = barColor;
+            // const dataMoms = dataNoMoms.map(([value, color]) => {
+            //     const priceWithoutMoms: number = value - (value * vatRate); // Now 'value' is a number
+            //     const newColor: string = barColor;
 
-                return [priceWithoutMoms, newColor] as [number, string];
-            });
-            setutanMomsData(dataMoms);
+            //     return [priceWithoutMoms, newColor] as [number, string];
+            // });
+            setutanMomsData(dataNoMoms);
         }
     }, [dataWithMoms]);
 
@@ -158,7 +179,7 @@ function App() {
                                 <text className="dateLabel" x={x + barPlotWidth / 2} y={xAxisY + 16} textAnchor={"middle"} >
                                     {date}
                                 </text>
-                                {checkBoxes.printVersion && <text className="barData" x={x + barPlotWidth / 2} y={((yAxisLength - height) - 4)} textAnchor={"middle"} fill="black"  >
+                                {checkBoxes.printVersion && <text className="barData" x={x + barPlotWidth / 2} y={((yAxisLength - height) - 12)} textAnchor={"middle"} fill="black"  >
                                     {dataY + ":-"}
                                 </text>}
 
@@ -168,12 +189,13 @@ function App() {
 
                     {/* --------------------------- BARS EXKL MOMS --------------------------- */}
 
-                    {checkBoxes.exklMoms && dataWithoutMoms.map(([dataY, color], index) => {
+                    {checkBoxes.exklMoms && dataWithoutMoms.map(([dataY, color, oldHeight], index) => {
                         const x = x0 + index * barPlotWidth;
                         const yRatio = (dataY - dataYMin) / dataYRange;
                         const y = y0 + (1 - yRatio) * yAxisLength;
                         const height = yRatio * yAxisLength;
                         const sidePadding = 14;
+                        const altHeight = oldHeight
 
 
                         return (
@@ -203,7 +225,7 @@ function App() {
                                         setTooltip((prev) => ({ ...prev, visible: false }))
                                     }
                                 />
-                                {checkBoxes.printVersion && <text className="barData" x={x + barPlotWidth / 2} y={((yAxisLength - height) + 16)} textAnchor={"middle"} fill="white"  >
+                                {checkBoxes.printVersion && <text className="barData" x={x + barPlotWidth / 2} y={((yAxisLength - altHeight) - 2)} textAnchor={"middle"} fill="black"  >
                                     {dataY + ":-"}
                                 </text>}
 

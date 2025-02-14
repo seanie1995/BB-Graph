@@ -1,4 +1,4 @@
-import Graph from "./BarGraph.tsx"
+import Graph from "./BarGraph2.tsx"
 
 import './App.css'
 
